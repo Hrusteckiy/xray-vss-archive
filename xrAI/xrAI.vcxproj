@@ -66,9 +66,10 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">x:\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">x:\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">Mixed\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)xrCore;$(SolutionDir)SDK\dxsdk_mar2009\Include;$(SolutionDir)SDK\loki;$(SolutionDir)SDK\MagicSoftware\FreeMagic\Include;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)SDK\dxsdk_mar2009\Lib\x86;$(SolutionDir)lib;$(SolutionDir)SDK\FreeImage;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -192,7 +193,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;AI_COMPILER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>false</FunctionLevelLinking>
@@ -200,25 +201,14 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Release/xrAI.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Mixed\</AssemblerListingLocation>
-      <ObjectFileName>Mixed\</ObjectFileName>
-      <ProgramDataBaseFileName>Mixed\</ProgramDataBaseFileName>
       <BrowseInformation>
       </BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>x:\xrAI.exe</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>x:\$(ProjectName).pdb</ProgramDatabaseFile>
-      <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
       <StackReserveSize>0</StackReserveSize>
       <StackCommitSize>0</StackCommitSize>
@@ -227,7 +217,6 @@
       </TerminalServerAware>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <TargetMachine>NotSet</TargetMachine>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

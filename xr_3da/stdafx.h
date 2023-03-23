@@ -51,15 +51,15 @@
 #include "sound.h"
 
 // TODO: reference additional headers your program requires here
-#pragma comment( lib, "x:\\xrCore.lib"	)
-#pragma comment( lib, "x:\\xrCDB.lib"	)
-#pragma comment( lib, "x:\\xrSound.lib"	)
-#pragma comment( lib, "x:\\xrLUA.lib"	)
+#pragma comment( lib, "xrCore.lib"	)
+#pragma comment( lib, "xrCDB.lib"	)
+#pragma comment( lib, "xrSound.lib"	)
+#pragma comment( lib, "xrLUA.lib"	)
 
 #pragma comment( lib, "winmm.lib"		)
 
 #pragma comment( lib, "d3d9.lib"		)
-#pragma comment( lib, "dinput.lib"		)
+#pragma comment( lib, "dinput8.lib"		)
 #pragma comment( lib, "dxguid.lib"		)
 
 #ifndef DEBUG
@@ -70,7 +70,8 @@
 	// release: no error checking, no exceptions
 	#define LUABIND_NO_EXCEPTIONS
 	#define BOOST_THROW_EXCEPTION_HPP_INCLUDED
-	namespace boost {	ENGINE_API	void __stdcall throw_exception(const std::exception &A);	};
+	namespace std	{	class exception; }
+	namespace boost {	ENGINE_API	void throw_exception(const std::exception &A);	};
 #endif
 #define LUABIND_DONT_COPY_STRINGS
 

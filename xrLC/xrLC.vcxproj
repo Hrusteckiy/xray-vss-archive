@@ -64,9 +64,10 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">x:\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">x:\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">Mixed\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)xrCore;$(SolutionDir)SDK\dxsdk_mar2009\Include;$(SolutionDir)SDK\MagicSoftware\FreeMagic\Include;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)lib;$(SolutionDir)SDK\dxsdk_mar2009\Lib\x86;$(SolutionDir)SDK\FreeImage;$(SolutionDir)SDK\MagicSoftware\FreeMagic\Library\ReleaseDLL;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -176,7 +177,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">
     <ClCompile>
-      <AdditionalOptions>/Gs  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -184,42 +184,28 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <AdditionalIncludeDirectories>..\xrQSlim\src; .\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_USE_MATH_DEFINES;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;WIN32;_DEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Debug/xrLC.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Mixed\</AssemblerListingLocation>
-      <ObjectFileName>Mixed\</ObjectFileName>
-      <ProgramDataBaseFileName>Mixed\</ProgramDataBaseFileName>
       <BrowseInformation>
       </BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
-      <ShowProgress>NotSet</ShowProgress>
-      <OutputFile>x:\xrLC.exe</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>x:\$(ProjectName).pdb</ProgramDatabaseFile>
-      <GenerateMapFile>true</GenerateMapFile>
-      <MapExports>false</MapExports>
       <SubSystem>Windows</SubSystem>
       <LargeAddressAware>true</LargeAddressAware>
       <TerminalServerAware>
       </TerminalServerAware>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <TargetMachine>NotSet</TargetMachine>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

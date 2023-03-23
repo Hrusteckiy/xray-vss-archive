@@ -59,15 +59,15 @@ public:
 	}
 };
 //-----------------------------------------------------------------------
-extern __declspec(dllimport)	size_t	__cdecl lua_memusage	();
+
 class CCC_MemStat : public IConsole_Command
 {
 public:
 	CCC_MemStat(LPCSTR N) : IConsole_Command(N)  { bEmptyArgsHandled = TRUE; };
 	virtual void Execute(LPCSTR args) {
 		Memory.mem_statistic				();
-		Msg	("* ----- lua VM storage -----"	);
-		Msg ("- %d bytes",u32(lua_memusage()));
+		//Msg	("* ----- lua VM storage -----"	);
+		//Msg ("- %d bytes",u32(lua_memusage()));
 		Msg	("* ----- string storage -----"	);
 		g_pStringContainer->dump			();
 		Msg	("* ----- shared memory -----"	);
@@ -102,14 +102,14 @@ public:
 		size_t  w_free, w_reserved, w_committed;
 		vminfo	(&w_free, &w_reserved, &w_committed);
 		u32		_total			= Memory.mem_usage	();
-		u32		_lua			= u32 (lua_memusage());
+		//u32		_lua			= u32 (lua_memusage());
 		u32		_eco_strings	= g_pStringContainer->stat_economy			();
 		u32		_eco_smem		= g_pSharedMemoryContainer->stat_economy	();
 		u32	m_base,c_base,m_lmaps,c_lmaps;
 		Device.Resources->_GetMemoryUsage	(m_base,c_base,m_lmaps,c_lmaps);
 		Msg		("* [win32]: free[%d K], reserved[%d K], committed[%d K]",w_free/1024,w_reserved/1024,w_committed/1024);
 		Msg		("* [D3D]: textures[%d K]", (m_base+m_lmaps)/1024);
-		Msg		("* [x-ray]: total[%d K], lua[%d K]",_total/1024,_lua/(1024*1024));
+		Msg		("* [x-ray]: total[%d K]",_total/1024);
 		Msg		("* [x-ray]: economy: strings[%d K], smem[%d K]",_eco_strings/1024,_eco_smem);
 	}
 };

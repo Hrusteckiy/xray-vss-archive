@@ -19,10 +19,10 @@
 #pragma comment(lib,"d3dx9.lib")
 #pragma comment(lib,"IMAGEHLP.LIB")
 #pragma comment(lib,"winmm.LIB")
-#pragma comment(lib,"x:/xrcdb.LIB")
-#pragma comment(lib,"x:/MagicFM.LIB")
-#pragma comment(lib,"x:/xrCore.LIB")
-#pragma comment(lib,"x:/xrSE_Factory.LIB")
+#pragma comment(lib,"xrCDB.lib")
+#pragma comment(lib,"MagicFM.lib")
+#pragma comment(lib,"xrCore.lib")
+#pragma comment(lib,"xrSE_Factory.lib")
 
 extern void	xrCompiler			(LPCSTR name, bool draft_mode);
 extern void logThread			(void *dummy);
@@ -60,7 +60,7 @@ void Startup(LPSTR     lpCmdLine)
 	BOOL bModifyOptions		= FALSE;
 
 	strcpy(cmd,lpCmdLine);
-	strlwr(cmd);
+	_strlwr(cmd);
 	if (strstr(cmd,"-?") || strstr(cmd,"-h"))			{ Help(); return; }
 	if ((strstr(cmd,"-f")==0) && (strstr(cmd,"-g")==0) && (strstr(cmd,"-m")==0) && (strstr(cmd,"-s")==0) && (strstr(cmd,"-t")==0) && (strstr(cmd,"-c")==0) && (strstr(cmd,"-verify")==0))	{ Help(); return; }
 	if (strstr(cmd,"-o"))								bModifyOptions = TRUE;

@@ -55,7 +55,8 @@ void vfLoadGraphPoints(LPCSTR name)
 	IReader									*F = FS.r_open(fName);
 	u32										id;
 	IReader									*O = F->open_chunk_iterator(id);
-	for (int i=0; O; O = F->open_chunk_iterator(id,O))	{
+	int i = 0;
+	for (; O; O = F->open_chunk_iterator(id,O))	{
 		NET_Packet							P;
 		P.B.count							= O->length();
 		O->r								(P.B.data,P.B.count);
@@ -94,7 +95,8 @@ void vfLoadGraphPoints(LPCSTR name)
 void vfRemoveDuplicateGraphPoints(u32 &dwVertexCount)
 {
 	Progress(0.0f);
-	for (int i=0, k=0, N = (int)tpaGraph.size(); i<N; i++)
+	int k = 0;
+	for (int i=0, N = (int)tpaGraph.size(); i<N; i++)
 		for (int j=i+1; j<N; j++)
 			if (tpaGraph[i].tLocalPoint.distance_to(tpaGraph[j].tLocalPoint) < EPS_L) {
 				tpaGraph.erase(tpaGraph.begin() + j);
@@ -289,7 +291,8 @@ public:
 		Progress					(0.25f);
 		for (int i=0; i<(int)tpaGraph.size(); Progress(.25f + float(++i)/tpaGraph.size()/2)) {
 			SDynamicGraphVertex		&tDynamicGraphVertex = tpaGraph[i];
-			for (int j=0, k=0; j<(int)tDynamicGraphVertex.tNeighbourCount; j++)
+			int k = 0;
+			for (int j=0; j<(int)tDynamicGraphVertex.tNeighbourCount; j++)
 				if (!tpAI_Map->q_mark_bit[tDynamicGraphVertex.tpaEdges + j - tpaEdges]) {
 					k++;
 					tGraph.w_u32	(tDynamicGraphVertex.tpaEdges[j].vertex_id());	
@@ -333,7 +336,9 @@ void vfRemoveIncoherentGraphPoints(CLevelGraph *tpAI_Map, u32 &dwVertexCount)
 	xr_vector<bool>		tMarks;
 	xr_vector<bool>		tDisconnected;
 	tDisconnected.assign(tpaGraph.size(),false);
-	for (int k=0, j=0, n=(int)tpaGraph.size(); k<n; k++) {
+	int n = (int) tpaGraph.size();
+	int j = 0;
+	for (int k=0; k<n; k++) {
 		tMarks.assign	(tpAI_Map->header().vertex_count(),false);
 		vfRecurseMark	(*tpAI_Map,tMarks,tpaGraph[k].tNodeID);
 		for (int i=0; i<n; i++)
@@ -474,8 +479,9 @@ void xrBuildGraph(LPCSTR name)
 		tThreadManager.start(xr_new<CGraphThread>(thID,M, ((thID + 1) == dwThreadCount) ? N - 1 : M + (K = GET_INDEX((N - M),(dwThreadCount - thID))),MAX_DISTANCE_TO_CONNECT,&tCriticalSection,tpAI_Map));
 //		xr_new<CGraphThread>(thID,M, ((thID + 1) == dwThreadCount) ? N - 1 : M + (K = GET_INDEX((N - M),(dwThreadCount - thID))),MAX_DISTANCE_TO_CONNECT,&tCriticalSection,tpAI_Map)->Execute();
 	tThreadManager.wait();
-	
-	for (int i=0, dwEdgeCount=0; i<(int)tpaGraph.size(); i++)
+
+	int dwEdgeCount = 0;
+	for (int i=0; i<(int)tpaGraph.size(); i++)
 		dwEdgeCount += tpaGraph[i].tNeighbourCount;
 	Msg("%d edges built",dwEdgeCount);
 	Progress(1.0f);

@@ -75,12 +75,12 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">x:\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(Configuration)\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='DebugNoExceptions|Win32'">x:\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='DebugNoExceptions|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DebugNoExceptions|Win32'">true</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)xrCore;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -180,26 +180,17 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Release/xrCompress.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)xrCompress.exe</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <ProgramDatabaseFile>.\Release/xrCompress.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>
       </OptimizeReferences>
       <EnableCOMDATFolding>
       </EnableCOMDATFolding>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Midl>
       <TypeLibraryName>.\Release/xrCompress.tlb</TypeLibraryName>

@@ -34,13 +34,13 @@ void* __stdcall FileDownload(LPCSTR fn, u32* pdwSize)
 	u32		size;
 	void*	buf;
 
-	hFile	= open(fn,O_RDONLY|O_BINARY|O_SEQUENTIAL);
+	hFile	= _open(fn,O_RDONLY|O_BINARY|O_SEQUENTIAL);
 	if (hFile<=0)	{
 		Sleep	(1);
-		hFile	= open(fn,O_RDONLY|O_BINARY|O_SEQUENTIAL);
+		hFile	= _open(fn,O_RDONLY|O_BINARY|O_SEQUENTIAL);
 	}
 	R_ASSERT2(hFile>0,fn);
-	size	= filelength(hFile);
+	size	= _filelength(hFile);
 
 	buf		= xr_malloc	(size);
 	_read	(hFile,buf,size);
@@ -53,22 +53,22 @@ typedef char MARK[9];
 IC void mk_mark(MARK& M, const char* S)
 {	strncpy(M,S,8); }
 
-void __stdcall FileCompress	(const char *fn, const char* sign, void* data, u32 size)
+void FileCompress	(const char *fn, const char* sign, void* data, u32 size)
 {
 	MARK M; mk_mark(M,sign);
 
-	int H	= open(fn,O_BINARY|O_CREAT|O_WRONLY|O_TRUNC,S_IREAD|S_IWRITE);
+	int H	= _open(fn,O_BINARY|O_CREAT|O_WRONLY|O_TRUNC,S_IREAD|S_IWRITE);
 	R_ASSERT2(H>0,fn);
 	_write	(H,&M,8);
 	_writeLZ(H,data,size);
 	_close	(H);
 }
 
-void* __stdcall FileDecompress	(const char *fn, const char* sign, u32* size)
+void* FileDecompress	(const char *fn, const char* sign, u32* size)
 {
 	MARK M,F; mk_mark(M,sign);
 
-	int	H = open	(fn,O_BINARY|O_RDONLY);
+	int	H = _open	(fn,O_BINARY|O_RDONLY);
 	R_ASSERT2(H>0,fn);
 	_read	(H,&F,8);
 	if (strncmp(M,F,8)!=0)		{
@@ -77,7 +77,7 @@ void* __stdcall FileDecompress	(const char *fn, const char* sign, u32* size)
     R_ASSERT(strncmp(M,F,8)==0);
 
 	void* ptr = 0; u32 SZ;
-	SZ = _readLZ (H, ptr, filelength(H)-8);
+	SZ = _readLZ (H, ptr, _filelength(H)-8);
 	_close	(H);
 	if (size) *size = SZ;
 	return ptr;

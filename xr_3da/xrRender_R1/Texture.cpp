@@ -270,7 +270,7 @@ _DDS_CUBE:
 _DDS_2D:
 		{
 			// Check for LMAP and compress if needed
-			strlwr					(fn);
+			_strlwr					(fn);
 
 			// Load   SYS-MEM-surface, bound to device restrictions
 			IDirect3DTexture9*		T_sysmem;

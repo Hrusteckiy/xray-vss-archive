@@ -96,7 +96,7 @@ void CSoundRender_Source::load(LPCSTR name,	BOOL b3D)
 {
 	string256			fn,N;
 	strcpy				(N,name);
-	strlwr				(N);
+	_strlwr				(N);
 	if (strext(N))		*strext(N) = 0;
 
 	fname				= N;

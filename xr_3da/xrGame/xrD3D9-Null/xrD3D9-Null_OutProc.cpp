@@ -43,7 +43,7 @@ void LogOut( const char *format, ... )
 	char text[4096];
 
 	va_start (argptr,format);
-	vsprintf (text, format, argptr);
+	vsprintf_s (text, format, argptr);
 	va_end (argptr);
 
 	//rr  printf(text);
@@ -55,13 +55,13 @@ void LogOut_File(const char *pszFormat, ...)
 	char s[128];
 	va_list va;
 	va_start(va, pszFormat);
-	vsprintf(s, pszFormat, va);
+	vsprintf_s(s, pszFormat, va);
 	va_end(va);
 	fprintf(stderr,s);
 	
 
 	FILE *fp;
-	fp = fopen("d3d9-null.log","a+t");
+	fopen_s(&fp, "d3d9-null.log", "a+t");
 	if (fp)
 	{		
 		fprintf(fp,"%s",s);

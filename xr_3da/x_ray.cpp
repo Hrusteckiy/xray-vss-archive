@@ -584,7 +584,7 @@ int CApplication::Level_ID(LPCSTR name)
 	strconcat	(buffer,name,"\\");
 	for (u32 I=0; I<Levels.size(); I++)
 	{
-		if (0==stricmp(buffer,Levels[I].folder))	return int(I);
+		if (0==_stricmp(buffer,Levels[I].folder))	return int(I);
 	}
 	return -1;
 }
@@ -655,7 +655,7 @@ void doBenchmark()
 		ini.r_line( "benchmark", i, &test_name, &t);
 		
 		test_command = ini.r_string_wb("benchmark",test_name);
-		strlwr				(strcpy(Core.Params,*test_command));
+		_strlwr				(strcpy(Core.Params,*test_command));
 		
 		if(i){
 			ZeroMemory(&HW,sizeof(CHW));

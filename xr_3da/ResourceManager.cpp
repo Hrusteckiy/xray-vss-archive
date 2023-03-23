@@ -79,7 +79,7 @@ void	CResourceManager::_ParseList(sh_list& dest, LPCSTR names)
 		if (*P == ',') {
 			// flush
 			N.push_back	(0);
-			strlwr		(N.begin());
+			_strlwr		(N.begin());
 			if (strext(N.begin())) *strext(N.begin())=0;
 			dest.last	()	= N.begin();
 			dest.inc	();
@@ -93,7 +93,7 @@ void	CResourceManager::_ParseList(sh_list& dest, LPCSTR names)
 	{
 		// flush
 		N.push_back	(0);
-		strlwr		(N.begin());
+		_strlwr		(N.begin());
 		if (strext(N.begin())) *strext(N.begin())=0;
 		dest.last	()	= N.begin();
 		dest.inc	();

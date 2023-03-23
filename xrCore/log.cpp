@@ -158,7 +158,7 @@ void CreateLog			(BOOL nl)
 	strcpy(buf,__DATE__);
 	sscanf(buf,"%s %d %d",mon,&dnum, &ynum);
 	for (int i=0; i<12; i++) {
-		if (stricmp(month[i],mon)==0) mnum=i;
+		if (_stricmp(month[i],mon)==0) mnum=i;
 	}
 	for (mcnt=6; mcnt<mnum; mcnt++) build+=day_in_month[mcnt];
 	build+=dnum;

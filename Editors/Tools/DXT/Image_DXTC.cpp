@@ -99,7 +99,7 @@ bool Image_DXTC::LoadFromFile(LPCSTR filename )
 	char fileupper[256];
 
 	strcpy( fileupper, filename); 
-	strupr( fileupper );
+	_strupr( fileupper );
 
 
 	//TRACE( "\n" );
@@ -1564,7 +1564,8 @@ inline void GetColorBlockColors_m1( DXTColBlock * pBlock, Color8888 * col_0, Col
 //-----------------------------------------------------------------------------
 WORD GetNumberOfBits( DWORD dwMask )
 {
-    for( WORD wBits = 0; dwMask; wBits++ )
+	WORD wBits = 0;
+    for(; dwMask; wBits++ )
         dwMask = dwMask & ( dwMask - 1 );  
 
     return wBits;

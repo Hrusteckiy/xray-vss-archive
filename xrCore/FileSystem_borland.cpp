@@ -93,9 +93,9 @@ void EFS_Utils::WriteAccessLog(LPCSTR fn, LPCSTR start_msg)
 	sprintf			(buf, "%s:   '%s' from computer: '%s' by user: '%s' at %s %s",start_msg,fn,Core.CompName,Core.UserName,_strdate(dt_buf),_strtime(tm_buf));
 	xr_string		m_AccessLog;
 	FS.update_path	(m_AccessLog,"$server_data_root$","access.log");
-	int hf 			= open( m_AccessLog.c_str(), _O_WRONLY|_O_APPEND|_O_BINARY );
+	int hf 			= _open( m_AccessLog.c_str(), _O_WRONLY|_O_APPEND|_O_BINARY );
 	if( hf<=0 )
-		hf = open( m_AccessLog.c_str(),
+		hf = _open( m_AccessLog.c_str(),
 		_O_WRONLY|_O_CREAT|_O_TRUNC| _O_BINARY,
 		_S_IREAD | _S_IWRITE );
 

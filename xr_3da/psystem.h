@@ -7,9 +7,9 @@
 #else
 	#define PARTICLES_API __declspec(dllimport)
 	#ifdef _EDITOR
-		#pragma comment(lib,"x:\\xrParticlesB.lib")
+		#pragma comment(lib,"xrParticlesB.lib")
 	#else
-		#pragma comment(lib,"x:\\xrParticles.lib")
+		#pragma comment(lib,"xrParticles.lib")
 	#endif
 #endif
 
@@ -63,8 +63,8 @@ namespace PAPI{
 		Flags16		flags;	// 2
 	};                  	// 		72
 
-	typedef void (__stdcall * OnBirthParticleCB)(void* owner, u32 param, PAPI::Particle& P, u32 idx);
-	typedef void (__stdcall * OnDeadParticleCB)(void* owner, u32 param, PAPI::Particle& P, u32 idx);
+	typedef void (* OnBirthParticleCB)(void* owner, u32 param, PAPI::Particle& P, u32 idx);
+	typedef void (* OnDeadParticleCB)(void* owner, u32 param, PAPI::Particle& P, u32 idx);
 	//////////////////////////////////////////////////////////////////////
 	// Type codes for domains
 	enum PDomainEnum

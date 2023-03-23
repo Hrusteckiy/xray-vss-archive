@@ -245,7 +245,9 @@ protected:
 		}
 		else if ( *length )
 		{
-			strncpy( _value, p, *length );
+			for( int i=0; p[i] && i<*length; ++i ) {
+				_value[i] = p[i];
+			}
 			return p + (*length);
 		}
 		else

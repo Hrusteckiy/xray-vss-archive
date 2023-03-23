@@ -8,8 +8,12 @@
 
 #include "stdafx.h"
 #include "script_space.h"
+
+extern "C" {
 #include "lua.h"
-#include "lstate.h"
+	#include "luajit.h"
+};
+
 #include "script_engine.h"
 #include "script_thread.h"
 #include "ai_space.h"
@@ -111,7 +115,7 @@ bool CScriptThread::update()
 			m_active		= false;
 		}
 		else {
-			if (!(lua()->ci->state & CI_YIELD)) {
+			if (l_iErrorCode != LUA_YIELD) {
 				m_active	= false;
 				ai().script_engine().script_log	(ScriptStorage::eLuaMessageTypeInfo,"Script %s is finished!",*m_script_name);
 			}

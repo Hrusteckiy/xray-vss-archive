@@ -375,7 +375,7 @@ bool CSMotion::Load(IReader& F)
 		bone_mots.resize(F.r_u32());
         string64	temp_buf;
 		for(BoneMotionIt bm_it=bone_mots.begin(); bm_it!=bone_mots.end(); bm_it++){
-        	bm_it->SetName	(itoa(int(bm_it-bone_mots.begin()),temp_buf,10));
+        	bm_it->SetName	(_itoa(int(bm_it-bone_mots.begin()),temp_buf,10));
 			bm_it->m_Flags.assign((u8)F.r_u32());
 			for (int ch=0; ch<ctMaxChannel; ch++){
 				bm_it->envs[ch] = xr_new<CEnvelope> ();

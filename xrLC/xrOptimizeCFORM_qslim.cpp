@@ -3,7 +3,7 @@
 #include <MxStdModel.h>
 #include <MxQSlim.h>
 
-#pragma comment (lib,"x:/xrQSlim.lib")
+#pragma comment (lib,"xrQSlim.lib")
 
 #define MAX_DECIMATE_ERROR 0.0005f
 #define COMPACTNESS_RATIO  0.001f
@@ -74,7 +74,7 @@ void SimplifyCFORM		(CDB::CollectorPacked& CL)
 
 	// constraint material&sector vertex
 	Ivector2 f_rm[3]={{0,1}, {1,2}, {2,0}};
-	for (f_idx=0; f_idx<slim->valid_faces; f_idx++){
+	for (u32 f_idx=0; f_idx<slim->valid_faces; f_idx++){
 		if (mdl->face_is_valid(f_idx)){
 			MxFace& base_f				= mdl->face(f_idx);
 			for (u32 edge_idx=0; edge_idx<3; edge_idx++){
@@ -121,7 +121,7 @@ void SimplifyCFORM		(CDB::CollectorPacked& CL)
 	mdl->compact_vertices	();
 
 	// rebuild CDB
-	for (f_idx=0; f_idx<mdl->face_count(); f_idx++){
+	for (u32 f_idx=0; f_idx<mdl->face_count(); f_idx++){
 		if (mdl->face_is_valid(f_idx)){
 			MxFace& F		= mdl->face(f_idx);
 			face_props& FP	= FPs[f_idx];

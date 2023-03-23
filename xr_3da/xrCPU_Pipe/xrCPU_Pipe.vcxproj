@@ -79,13 +79,14 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">x:\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">Mixed\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='DebugNoExceptions|Win32'">x:\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='DebugNoExceptions|Win32'">$(Configuration)\</IntDir>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='DebugNoExceptions|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DebugNoExceptions|Win32'">true</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)xrCore;$(SolutionDir)SDK\DPlay;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">$(SolutionDir)lib;$(SolutionDir)SDK\dxsdk_mar2009\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -218,33 +219,21 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AssemblerOutput>
       </AssemblerOutput>
-      <AssemblerListingLocation>Mixed\</AssemblerListingLocation>
-      <ObjectFileName>Mixed\</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
       <BrowseInformation>
       </BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
-      <AdditionalOptions>/MACHINE:I386  %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>x:\xr_3da.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>x:\xrCPU_Pipe.dll</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalDependencies>xr_3da.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
-      <MapFileName>x:\xrCPU_Pipe.map</MapFileName>
       <OptimizeReferences>
       </OptimizeReferences>
       <EnableCOMDATFolding>
       </EnableCOMDATFolding>
-      <ImportLibrary>x:\xrCPU_Pipe.lib</ImportLibrary>
-      <TargetMachine>NotSet</TargetMachine>
+      <ImportLibrary>$(SolutionDir)lib\$(ProjectName).lib</ImportLibrary>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -11,7 +11,10 @@
 #include "script_storage.h"
 #include "script_export_space.h"
 #include "script_space_forward.h"
+
+extern "C" {
 #include <lua.h>
+};
 
 //#define DBG_DISABLE_SCRIPTS
 

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #pragma hdrstop
 
+#define _USE_32BIT_TIME_T
 #include <time.h>
 
 #include "Blender.h"
@@ -15,12 +16,12 @@ void CBlender_DESC::Setup	(LPCSTR N)
 	VERIFY(xr_strlen(N)<128);
 	VERIFY(0==strchr(N,'.'));
 	strcpy(cName,N);
-	strlwr(cName);
+	_strlwr(cName);
 	
 //	strcpy(cComputer,Core.CompName);			// Computer
 //	_tzset(); _time32( (__time32_t*)&cTime );	// Time
 	strcpy(cComputer,Core.CompName);			// Computer
-	_tzset(); time( (long*)&cTime );			// Time
+	_tzset(); _time32( (__time32_t*)&cTime );			// Time
 };
 
 //////////////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 #include "dxtlib.h"
 #include "ETextureParams.h"
 #include "dds.h"
-#include "d3dx.h"
+#include <ddraw.h>
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        u32  ul_reason_for_call, 
@@ -245,7 +245,7 @@ int DXTCompressImage	(LPCSTR out_name, u8* raw_data, u32 w, u32 h, u32 pitch,
 extern int DXTCompressBump(LPCSTR out_name, u8* raw_data, u8* normal_map, u32 w, u32 h, u32 pitch, STextureParams* fmt, u32 depth);
 
 extern "C" __declspec(dllexport) 
-int DXTCompress	(LPCSTR out_name, u8* raw_data, u8* normal_map, u32 w, u32 h, u32 pitch, 
+int __stdcall DXTCompress	(LPCSTR out_name, u8* raw_data, u8* normal_map, u32 w, u32 h, u32 pitch, 
 					STextureParams* fmt, u32 depth)
 {
 	switch (fmt->type){

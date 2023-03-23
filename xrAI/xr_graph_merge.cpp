@@ -176,7 +176,8 @@ public:
 			IReader									*F = FS.r_open(fName);
 			u32										id;
 			IReader									*O = F->open_chunk_iterator(id);
-			for (int i=0; O; O = F->open_chunk_iterator(id,O))	{
+			int i = 0;
+			for (; O; O = F->open_chunk_iterator(id,O))	{
 				NET_Packet							P;
 				P.B.count							= O->length();
 				O->r								(P.B.data,P.B.count);
@@ -359,7 +360,7 @@ void read_levels(CInifile *Ini, xr_set<CLevelInfo> &levels)
 	string256			caFileName, file_name;
 	for (u32 k = 0; Ini->r_line("levels",k,&_N,&V); k++) {
 		string256		N;
-		strlwr			(strcpy(N,_N));
+		_strlwr			(strcpy(N,_N));
 
 		if (!Ini->section_exist(N)) {
 			Msg			("! There is no section %s in the %s!",N,GAME_CONFIG);
@@ -384,7 +385,7 @@ void read_levels(CInifile *Ini, xr_set<CLevelInfo> &levels)
 		u32				id = Ini->r_s32(N,"id");
 		LPCSTR			_S = Ini->r_string(N,"name");
 		string256		S;
-		strlwr			(strcpy(S,_S));
+		_strlwr			(strcpy(S,_S));
 		{
 			bool		ok = true;
 			xr_set<CLevelInfo>::const_iterator	I = levels.begin();

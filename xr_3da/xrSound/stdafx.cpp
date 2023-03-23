@@ -16,13 +16,14 @@
 #	pragma comment(lib,	"wrap_oalB.lib"		)
 #	pragma comment(lib,	"dsoundb.lib" 		)
 #else
-#	pragma comment(lib,	"x:\\eax.lib"		)
-#	pragma comment(lib,	"x:\\vorbis.lib"	)
-#	pragma comment(lib,	"x:\\vorbisfile.lib")
-#	pragma comment(lib,	"x:\\xrCore"		)
-#	pragma comment(lib,	"x:\\xrCDB"			)
-#	pragma comment(lib,	"x:\\wrap_oal.lib"	)
+#	pragma comment(lib,	"eax.lib"		)
+#	pragma comment(lib,	"vorbis_static.lib"	)
+#	pragma comment(lib,	"vorbisfile_static.lib")
+#	pragma comment(lib,	"xrCore"		)
+#	pragma comment(lib,	"xrCDB"			)
+#	pragma comment(lib,	"openal32.lib"	)
 #	pragma comment(lib,	"dsound.lib" 		)
+#pragma comment(lib, "ogg_static.lib")
 #endif
 
 #pragma comment(lib,	"msacm32.lib"		)

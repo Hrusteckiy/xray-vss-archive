@@ -845,7 +845,7 @@ BOOL CLocatorAPI::dir_delete(LPCSTR path,LPCSTR nm,BOOL remove_files)
 			if ((*end_symbol) !='\\'){
 //		        const char* entry_begin = entry.name+base_len;
 				if (!remove_files) return FALSE;
-		    	unlink		(entry.name);
+		    	_unlink		(entry.name);
 				files.erase	(cur_item);
 	        }else{
             	folders.insert(entry);
@@ -873,7 +873,7 @@ void CLocatorAPI::file_delete(LPCSTR path, LPCSTR nm)
     const files_it I	= file_find_it(fname);
     if (I!=files.end()){
 	    // remove file
-    	unlink			(I->name);
+    	_unlink			(I->name);
 		char* str		= LPSTR(I->name);
 		xr_free			(str);
 	    files.erase		(I);
@@ -902,7 +902,7 @@ void CLocatorAPI::file_rename(LPCSTR src, LPCSTR dest, bool bOwerwrite)
 		files_it D		= file_find_it(dest);
 		if (D!=files.end()){ 
 	        if (!bOwerwrite) return;
-            unlink		(D->name);
+            _unlink		(D->name);
 			char* str	= LPSTR(D->name);
 			xr_free		(str);
 			files.erase	(D);
@@ -1055,7 +1055,7 @@ BOOL CLocatorAPI::can_write_to_folder(LPCSTR path)
 		if (hf==0)		return FALSE;
         else{
         	fclose 		(hf);
-	    	unlink		(temp);
+	    	_unlink		(temp);
             return 		TRUE;
         }
     }else{

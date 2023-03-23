@@ -119,7 +119,8 @@ IC	void fill_mark(
 	CCellVertex					v = cell_vertex, v1;
 
 	VERTEX_VECTOR1				&vi = table[i];
-	for (u32 j2 = j + 1; j2<=max_x; ++j2)
+	u32 j2 = j + 1;
+	for (; j2<=max_x; ++j2)
 		if (vi[j2].empty() || !connect(level_graph,v,vi[j2],group_id,2,cross,up))
 			break;
 

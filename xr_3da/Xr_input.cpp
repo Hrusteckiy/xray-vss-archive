@@ -35,7 +35,7 @@ CInput::CInput						( BOOL bExclusive, int deviceForInit)
 	//===================== Dummy pack
 	iCapture	(&dummyController);
 
-	if (!pDI) CHK_DX(DirectInputCreateEx( GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput7, (void**)&pDI, NULL ));
+	if (!pDI) CHK_DX(DirectInput8Create( GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&pDI, NULL ));
 
 	// KEYBOARD
 	if (deviceForInit & keyboard_device_key)
@@ -47,7 +47,7 @@ CInput::CInput						( BOOL bExclusive, int deviceForInit)
 	// MOUSE
 	if (deviceForInit & mouse_device_key)
 		CHK_DX(CreateInputDevice(
-		&pMouse,		GUID_SysMouse,		&c_dfDIMouse,
+		&pMouse,		GUID_SysMouse,		&c_dfDIMouse2,
 		((bExclusive)?DISCL_EXCLUSIVE:DISCL_NONEXCLUSIVE) | DISCL_FOREGROUND | DISCL_NOWINKEY,
 		MOUSEBUFFERSIZE ));
 
@@ -86,10 +86,10 @@ CInput::~CInput(void)
 // Name: CreateInputDevice()
 // Desc: Create a DirectInput device.
 //-----------------------------------------------------------------------------
-HRESULT CInput::CreateInputDevice( LPDIRECTINPUTDEVICE7* device, GUID guidDevice, const DIDATAFORMAT* pdidDataFormat, u32 dwFlags, u32 buf_size )
+HRESULT CInput::CreateInputDevice( LPDIRECTINPUTDEVICE8* device, GUID guidDevice, const DIDATAFORMAT* pdidDataFormat, u32 dwFlags, u32 buf_size )
 {
 	// Obtain an interface to the input device
-	CHK_DX( pDI->CreateDeviceEx( guidDevice, IID_IDirectInputDevice7, (void**)device, NULL ) );
+	CHK_DX( pDI->CreateDevice( guidDevice, /*IID_IDirectInputDevice8,*/ device, NULL ) );
 
 	// Set the device data format. Note: a data format specifies which
 	// controls on a device we are interested in, and how they should be
@@ -155,7 +155,7 @@ void CInput::KeyUpdate	( )
 		if ( KBState[key])	cbStack.top()->IR_OnKeyboardPress	( key );
 		if (!KBState[key])	cbStack.top()->IR_OnKeyboardRelease	( key );
 	}
-	for ( i = 0; i < COUNT_KB_BUTTONS; i++ )
+	for (u32 i = 0; i < COUNT_KB_BUTTONS; i++ )
 		if (KBState[i]) cbStack.top()->IR_OnKeyboardHold( i );
 }
 
