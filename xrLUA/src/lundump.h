@@ -1,5 +1,5 @@
 /*
-** $Id: lundump.h,v 1.30 2003/04/07 20:34:20 lhf Exp $
+** $Id: lundump.h,v 1.38 2005/09/02 01:54:47 lhf Exp $
 ** load pre-compiled Lua chunks
 ** See Copyright Notice in lua.h
 */
@@ -10,25 +10,53 @@
 #include "lobject.h"
 #include "lzio.h"
 
-/* load one chunk; from lundump.c */
-Proto* luaU_undump (lua_State* L, ZIO* Z, Mbuffer* buff);
+/* make it work with Lua 5.0 */
+#ifndef LUA_VERSION_NUM
+#define LUAI_FUNC
+#define lua_Writer	lua_Chunkwriter
+#endif
 
-/* find byte order; from lundump.c */
-int luaU_endianness (void);
+/* load one chunk; from lundump.c */
+LUAI_FUNC Proto* luaU_undump (lua_State* L, ZIO* Z, Mbuffer* buff, const char* name);
+
+/* make header; from lundump.c */
+LUAI_FUNC void luaU_header (char* h);
 
 /* dump one chunk; from ldump.c */
-void luaU_dump (lua_State* L, const Proto* Main, lua_Chunkwriter w, void* data);
+LUAI_FUNC int luaU_dump (lua_State* L, const Proto* f, lua_Writer w, void* data, int strip);
 
 /* print one chunk; from print.c */
-void luaU_print (const Proto* Main);
+LUAI_FUNC void luaU_print (const Proto* f, int full);
 
-/* definitions for headers of binary files */
-#define	LUA_SIGNATURE	"\033Lua"	/* binary files start with "<esc>Lua" */
-#define	VERSION		0x50		/* last format change was in 5.0 */
-#define	VERSION0	0x50		/* last major  change was in 5.0 */
+/* for header of binary files -- this is Lua 5.1 */
+#define LUAC_VERSION		0x51
 
-/* a multiple of PI for testing native format */
-/* multiplying by 1E7 gives non-trivial integer values */
-#define	TEST_NUMBER	((lua_Number)3.14159265358979323846E7)
+/* for header of binary files -- this is the official format */
+#define LUAC_FORMAT		0
+
+/* size of header of binary files */
+#define LUAC_HEADERSIZE		12
+
+/* make it work with Lua 5.0 */
+#ifndef LUA_VERSION_NUM
+#define LUA_SIGNATURE		"\033Lua"
+#define TValue			TObject
+#define rawtsvalue		tsvalue
+#define linedefined		lineDefined
+#define lastlinedefined		lineDefined
+#define setptvalue2s(L,t,f)
+#undef	setsvalue2n
+#define setsvalue2n(L,x,y)	setsvalue(x,y)
+#define LUA_QL(x)		"'" x "'"
+#define LUA_QS			LUA_QL("%s")
+#undef	LUAC_VERSION
+#define LUAC_VERSION		0x50
+#ifdef lapi_c
+#define luaU_dump(L,f,w,d) 	(luaU_dump)(L,f,w,d,0)
+#endif
+#ifdef ldo_c
+#define luaU_undump(L,z,b)	(luaU_undump)(L,z,b,z->name)
+#endif
+#endif
 
 #endif

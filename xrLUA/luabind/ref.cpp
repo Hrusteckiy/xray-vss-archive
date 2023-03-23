@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
+#define LUA_LIB
 #include <algorithm>
 #include <luabind/config.hpp>
 #include <luabind/detail/ref.hpp>
@@ -92,7 +93,7 @@ namespace luabind { namespace detail
 		}
 	}
 
-	void luaL_setn (lua_State *L, int t, int n)
+	void luaL_setn_ (lua_State *L, int t, int n)
 	{
 		lua_pushliteral(L, "n");
 		lua_rawget(L, t);
@@ -110,7 +111,7 @@ namespace luabind { namespace detail
 		}
 	}
 
-	int luaL_getn (lua_State *L, int t)
+	int luaL_getn_ (lua_State *L, int t)
 	{
 		int n;
 		lua_pushliteral(L, "n");  /* try t.n */
@@ -150,11 +151,11 @@ namespace luabind { namespace detail
 			lua_rawseti(L, t, FREELIST_REF);  /* (t[FREELIST_REF] = t[ref]) */
 		}
 		else {  /* no free elements */
-			ref = ::luabind::detail::luaL_getn(L, t);
+			ref = ::luabind::detail::luaL_getn_(L, t);
 			if (ref < RESERVED_REFS)
 			ref = RESERVED_REFS;  /* skip reserved references */
 			ref++;  /* create new reference */
-			::luabind::detail::luaL_setn(L, t, ref);
+			::luabind::detail::luaL_setn_(L, t, ref);
 		}
 		lua_rawseti(L, t, ref);
 		return ref;

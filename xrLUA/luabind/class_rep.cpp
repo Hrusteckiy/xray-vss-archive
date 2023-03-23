@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
+#define LUA_LIB
 #include <luabind/lua_include.hpp>
 
 #include <luabind/detail/stack_utils.hpp>
@@ -236,7 +237,13 @@ int luabind::detail::class_rep::gettable(lua_State* L)
 
 	// we have to ignore the first argument since this may point to
 	// a method that is not present in this class (but in a subclass)
+#ifndef USE_NATIVE_LUA_STRINGS
 	const char* key = lua_tostring(L, 2);
+#else
+//	lua_string_holder	str = lua_string_holder(L,lua_tostring_object(L,2));
+	TString		*str = lua_tostring_object(L,2);
+	const char* key = getstr(str);
+#endif
 
 #ifndef LUABIND_NO_ERROR_CHECKING
 
@@ -292,7 +299,11 @@ int luabind::detail::class_rep::gettable(lua_State* L)
 	}
 	lua_pop(L, 2);
 
+#ifndef USE_NATIVE_LUA_STRINGS
 	std::map<const char*, callback, ltstr>::iterator j = m_getters.find(key);
+#else
+	callback_map::iterator j = m_getters.find(str);
+#endif
 	if (j != m_getters.end())
 	{
 		// the name is a data member
@@ -314,11 +325,21 @@ bool luabind::detail::class_rep::settable(lua_State* L)
 	// we have to ignore the first argument since this may point to
 	// a method that is not present in this class (but in a subclass)
 
+#ifndef USE_NATIVE_LUA_STRINGS
 	const char* key = lua_tostring(L, 2);
+#else
+//	lua_string_holder	str = lua_string_holder(L,lua_tostring_object(L,2));
+	TString		*str = lua_tostring_object(L,2);
+	const char* key = getstr(str);
+#endif
 
 	if (std::strlen(key) == lua_strlen(L, 2))
 	{
+#ifndef USE_NATIVE_LUA_STRINGS
 		std::map<const char*, callback, ltstr>::iterator j = m_setters.find(key);
+#else
+		callback_map::iterator j = m_setters.find(str);
+#endif
 		if (j != m_setters.end())
 		{
 			// the name is a data member
@@ -342,7 +363,11 @@ bool luabind::detail::class_rep::settable(lua_State* L)
 			return true;
 		}
 
+#ifndef USE_NATIVE_LUA_STRINGS
 		if (m_getters.find(key) != m_getters.end())
+#else
+		if (m_getters.find(str) != m_getters.end())
+#endif
 		{
 			// this means that we have a getter but no
 			// setter for an attribute. We will then fail
@@ -688,6 +713,11 @@ int luabind::detail::class_rep::function_dispatcher(lua_State* L)
         }
 		else
 		{
+#if 0
+			xr_string			str;
+			o.get_signature		(L, str);
+			OutputDebugString	((((xr_string("__function__") + rep->crep->name()) + "::") + rep->name + str + "\n").c_str());
+#endif
 	        return o.call(L, force_static_call != 0);
 		}
 
@@ -873,8 +903,13 @@ void luabind::detail::class_rep::add_base_class(const luabind::detail::class_rep
     }
 
 	// import all getters from the base
+#ifndef USE_NATIVE_LUA_STRINGS
 	for (std::map<const char*, callback, ltstr>::const_iterator i = bcrep->m_getters.begin(); 
 			i != bcrep->m_getters.end(); ++i)
+#else
+	for (callback_map::const_iterator i = bcrep->m_getters.begin(); 
+			i != bcrep->m_getters.end(); ++i)
+#endif
 	{
 		callback& m = m_getters[i->first];
 		m.pointer_offset = i->second.pointer_offset + binfo.pointer_offset;
@@ -887,8 +922,13 @@ void luabind::detail::class_rep::add_base_class(const luabind::detail::class_rep
 	}
 
 	// import all setters from the base
+#ifndef USE_NATIVE_LUA_STRINGS
 	for (std::map<const char*, callback, ltstr>::const_iterator i = bcrep->m_setters.begin(); 
 			i != bcrep->m_setters.end(); ++i)
+#else
+	for (callback_map::const_iterator i = bcrep->m_setters.begin(); 
+			i != bcrep->m_setters.end(); ++i)
+#endif
 	{
 		callback& m = m_setters[i->first];
 		m.pointer_offset = i->second.pointer_offset + binfo.pointer_offset;
@@ -901,8 +941,13 @@ void luabind::detail::class_rep::add_base_class(const luabind::detail::class_rep
 	}
 
 	// import all static constants
+#ifndef USE_NATIVE_LUA_STRINGS
 	for (std::map<const char*, int, ltstr>::const_iterator i = bcrep->m_static_constants.begin(); 
 			i != bcrep->m_static_constants.end(); ++i)
+#else
+	for (class_rep::STATIC_CONSTANTS::const_iterator i = bcrep->m_static_constants.begin(); 
+			i != bcrep->m_static_constants.end(); ++i)
+#endif
 	{
 		int& v = m_static_constants[i->first];
 		v = i->second;
@@ -1275,7 +1320,13 @@ int luabind::detail::class_rep::lua_class_gettable(lua_State* L)
 	// a method that is not present in this class (but in a subclass)
 
 	// BUG: This might catch members called "__ok\0foobar"
+#ifndef USE_NATIVE_LUA_STRINGS
 	const char* key		= lua_tostring(L, 2);
+#else
+//	lua_string_holder	str = lua_string_holder(L,lua_tostring_object(L,2));
+	TString		*str = lua_tostring_object(L,2);
+	const char* key = getstr(str);
+#endif
 	const char* _ok_	= "__ok";
 
 	if (key && ( *((unsigned*)key) == *((unsigned*)_ok_) ) && !key[4])
@@ -1321,7 +1372,11 @@ int luabind::detail::class_rep::lua_class_gettable(lua_State* L)
 		return 1;
 	}
 
+#ifndef USE_NATIVE_LUA_STRINGS
 	std::map<const char*, class_rep::callback, ltstr>::iterator j = crep->m_getters.find(key);
+#else
+	class_rep::callback_map::iterator j = crep->m_getters.find(str);
+#endif
 	if (j != crep->m_getters.end())
 	{
 		// the name is a data member
@@ -1359,10 +1414,19 @@ int luabind::detail::class_rep::lua_class_settable(lua_State* L)
 	// we have to ignore the first argument since this may point to
 	// a method that is not present in this class (but in a subclass)
 	// BUG: This will not work with keys with extra nulls in them
+#ifndef USE_NATIVE_LUA_STRINGS
 	const char* key = lua_tostring(L, 2);
+#else
+//	lua_string_holder	str = lua_string_holder(L,lua_tostring_object(L,2));
+	TString		*str = lua_tostring_object(L,2);
+	const char* key = getstr(str);
+#endif
 
-
+#ifndef USE_NATIVE_LUA_STRINGS
 	std::map<const char*, class_rep::callback, ltstr>::iterator j = crep->m_setters.find(key);
+#else
+	class_rep::callback_map::iterator j = crep->m_setters.find(str);
+#endif
 
 	// if the strlen(key) is not the true length,
 	// it means that the member-name contains
@@ -1372,7 +1436,11 @@ int luabind::detail::class_rep::lua_class_settable(lua_State* L)
 	if (j == crep->m_setters.end()
 		|| std::strlen(key) != lua_strlen(L, 2))
 	{
+#ifndef USE_NATIVE_LUA_STRINGS
 		std::map<const char*, class_rep::callback, ltstr>::iterator k = crep->m_getters.find(key);
+#else
+		class_rep::callback_map::iterator k = crep->m_getters.find(str);
+#endif
 
 #ifndef LUABIND_NO_ERROR_CHECKING
 
@@ -1422,7 +1490,13 @@ int luabind::detail::class_rep::static_class_gettable(lua_State* L)
 	if (!lua_isnil(L, -1)) return 1;
 	else lua_pop(L, 2);
 
+#ifndef USE_NATIVE_LUA_STRINGS
 	const char* key = lua_tostring(L, 2);
+#else
+//	lua_string_holder	str = lua_string_holder(L,lua_tostring_object(L,2));
+	TString		*str = lua_tostring_object(L,2);
+	const char* key = getstr(str);
+#endif
 
 	if (std::strlen(key) != lua_strlen(L, 2))
 	{
@@ -1430,7 +1504,11 @@ int luabind::detail::class_rep::static_class_gettable(lua_State* L)
 		return 1;
 	}
 
+#ifndef USE_NATIVE_LUA_STRINGS
 	std::map<const char*, int, ltstr>::const_iterator j = crep->m_static_constants.find(key);
+#else
+	STATIC_CONSTANTS::const_iterator j = crep->m_static_constants.find(str);
+#endif
 
 	if (j != crep->m_static_constants.end())
 	{

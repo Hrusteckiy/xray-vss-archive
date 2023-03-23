@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
 
+#define LUA_LIB
 #include <luabind/lua_include.hpp>
 
 #include <luabind/luabind.hpp>
@@ -27,7 +28,7 @@
 
 namespace luabind {
 
-    void open(lua_State* L)
+    void LUA_CC open(lua_State* L)
     {
         // get the global class registry, or create one if it doesn't exist
         // (it's global within a lua state)

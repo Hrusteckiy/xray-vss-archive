@@ -1,11 +1,15 @@
 /*
-** $Id: lobject.h,v 1.159 2003/03/18 12:50:04 roberto Exp $
+** $Id: lobject.h,v 2.17 2005/06/13 14:19:00 roberto Exp $
 ** Type definitions for Lua objects
 ** See Copyright Notice in lua.h
 */
 
+
 #ifndef lobject_h
 #define lobject_h
+
+
+#include <stdarg.h>
 
 
 #include "llimits.h"
@@ -13,14 +17,17 @@
 
 
 /* tags for values visible from Lua */
-#define NUM_TAGS	LUA_TTHREAD
+#define LAST_TAG	LUA_TTHREAD
+
+#define NUM_TAGS	(LAST_TAG+1)
 
 
 /*
 ** Extra tags for non-values
 */
-#define LUA_TPROTO	(NUM_TAGS+1)
-#define LUA_TUPVAL	(NUM_TAGS+2)
+#define LUA_TPROTO	(LAST_TAG+1)
+#define LUA_TUPVAL	(LAST_TAG+2)
+#define LUA_TDEADKEY	(LAST_TAG+3)
 
 
 /*
@@ -53,18 +60,21 @@ typedef union {
   GCObject *gc;
   void *p;
   lua_Number n;
+  int na[sizeof(lua_Number)/sizeof(ptrdiff_t)];  /* LuaJIT kludge */
   int b;
 } Value;
 
 
 /*
-** Lua values (or `tagged objects')
+** Tagged Values
 */
-typedef struct lua_TObject {
-  int tt;
-  Value value;
-} TLuaObject;
-#define  TObject TLuaObject
+
+#define TValuefields	Value value; int tt
+
+typedef struct lua_TValue {
+  TValuefields;
+} LUA_TVALUE_ALIGN TValue;
+
 
 /* Macros to test type */
 #define ttisnil(o)	(ttype(o) == LUA_TNIL)
@@ -82,8 +92,10 @@ typedef struct lua_TObject {
 #define gcvalue(o)	check_exp(iscollectable(o), (o)->value.gc)
 #define pvalue(o)	check_exp(ttislightuserdata(o), (o)->value.p)
 #define nvalue(o)	check_exp(ttisnumber(o), (o)->value.n)
-#define tsvalue(o)	check_exp(ttisstring(o), &(o)->value.gc->ts)
-#define uvalue(o)	check_exp(ttisuserdata(o), &(o)->value.gc->u)
+#define rawtsvalue(o)	check_exp(ttisstring(o), &(o)->value.gc->ts)
+#define tsvalue(o)	(&rawtsvalue(o)->tsv)
+#define rawuvalue(o)	check_exp(ttisuserdata(o), &(o)->value.gc->u)
+#define uvalue(o)	(&rawuvalue(o)->uv)
 #define clvalue(o)	check_exp(ttisfunction(o), &(o)->value.gc->cl)
 #define hvalue(o)	check_exp(ttistable(o), &(o)->value.gc->h)
 #define bvalue(o)	check_exp(ttisboolean(o), (o)->value.b)
@@ -91,59 +103,69 @@ typedef struct lua_TObject {
 
 #define l_isfalse(o)	(ttisnil(o) || (ttisboolean(o) && bvalue(o) == 0))
 
-/* Macros to set values */
-#define setnvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TNUMBER; i_o->value.n=(x); }
-
-#define chgnvalue(obj,x) \
-	check_exp(ttype(obj)==LUA_TNUMBER, (obj)->value.n=(x))
-
-#define setpvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TLIGHTUSERDATA; i_o->value.p=(x); }
-
-#define setbvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TBOOLEAN; i_o->value.b=(x); }
-
-#define setsvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TSTRING; \
-    i_o->value.gc=cast(GCObject *, (x)); \
-    lua_assert(i_o->value.gc->gch.tt == LUA_TSTRING); }
-
-#define setuvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TUSERDATA; \
-    i_o->value.gc=cast(GCObject *, (x)); \
-    lua_assert(i_o->value.gc->gch.tt == LUA_TUSERDATA); }
-
-#define setthvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TTHREAD; \
-    i_o->value.gc=cast(GCObject *, (x)); \
-    lua_assert(i_o->value.gc->gch.tt == LUA_TTHREAD); }
-
-#define setclvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TFUNCTION; \
-    i_o->value.gc=cast(GCObject *, (x)); \
-    lua_assert(i_o->value.gc->gch.tt == LUA_TFUNCTION); }
-
-#define sethvalue(obj,x) \
-  { TObject *i_o=(obj); i_o->tt=LUA_TTABLE; \
-    i_o->value.gc=cast(GCObject *, (x)); \
-    lua_assert(i_o->value.gc->gch.tt == LUA_TTABLE); }
-
-#define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
-
-
-
 /*
 ** for internal debug only
 */
 #define checkconsistency(obj) \
   lua_assert(!iscollectable(obj) || (ttype(obj) == (obj)->value.gc->gch.tt))
 
+#define checkliveness(g,obj) \
+  lua_assert(!iscollectable(obj) || \
+  ((ttype(obj) == (obj)->value.gc->gch.tt) && !isdead(g, (obj)->value.gc)))
 
-#define setobj(obj1,obj2) \
-  { const TObject *o2=(obj2); TObject *o1=(obj1); \
-    checkconsistency(o2); \
-    o1->tt=o2->tt; o1->value = o2->value; }
+
+/* Macros to set values */
+#define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
+
+#define setnvalue(obj,x) \
+  { TValue *i_o=(obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
+
+#define chgnvalue(obj,x) \
+	check_exp(ttype(obj)==LUA_TNUMBER, (obj)->value.n=(x))
+
+#define setpvalue(obj,x) \
+  { TValue *i_o=(obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
+
+#define setbvalue(obj,x) \
+  { TValue *i_o=(obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
+
+#define setsvalue(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TSTRING; \
+    checkliveness(G(L),i_o); }
+
+#define setuvalue(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TUSERDATA; \
+    checkliveness(G(L),i_o); }
+
+#define setthvalue(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTHREAD; \
+    checkliveness(G(L),i_o); }
+
+#define setclvalue(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TFUNCTION; \
+    checkliveness(G(L),i_o); }
+
+#define sethvalue(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTABLE; \
+    checkliveness(G(L),i_o); }
+
+#define setptvalue(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; \
+    checkliveness(G(L),i_o); }
+
+
+
+
+#define setobj(L,obj1,obj2) \
+  { const TValue *o2=(obj2); TValue *o1=(obj1); \
+    o1->value = o2->value; o1->tt=o2->tt; \
+    checkliveness(G(L),o1); }
 
 
 /*
@@ -155,6 +177,8 @@ typedef struct lua_TObject {
 /* to stack (not from same stack) */
 #define setobj2s	setobj
 #define setsvalue2s	setsvalue
+#define sethvalue2s	sethvalue
+#define setptvalue2s	setptvalue
 /* from table to same table */
 #define setobjt2t	setobj
 /* to table */
@@ -170,7 +194,7 @@ typedef struct lua_TObject {
 
 
 
-typedef TObject *StkId;  /* index to stack elements */
+typedef TValue *StkId;  /* index to stack elements */
 
 
 /*
@@ -181,7 +205,7 @@ typedef union TString {
   struct {
     CommonHeader;
     lu_byte reserved;
-    lu_hash hash;
+    unsigned int hash;
     size_t len;
   } tsv;
 } TString;
@@ -197,6 +221,7 @@ typedef union Udata {
   struct {
     CommonHeader;
     struct Table *metatable;
+    struct Table *env;
     size_t len;
   } uv;
 } Udata;
@@ -209,7 +234,7 @@ typedef union Udata {
 */
 typedef struct Proto {
   CommonHeader;
-  TObject *k;  /* constants used by the function */
+  TValue *k;  /* constants used by the function */
   Instruction *code;
   struct Proto **p;  /* functions defined inside the function */
   int *lineinfo;  /* map from opcodes to source lines */
@@ -222,13 +247,25 @@ typedef struct Proto {
   int sizelineinfo;
   int sizep;  /* size of `p' */
   int sizelocvars;
-  int lineDefined;
+  int linedefined;
+  int lastlinedefined;
   GCObject *gclist;
   lu_byte nups;  /* number of upvalues */
   lu_byte numparams;
   lu_byte is_vararg;
   lu_byte maxstacksize;
+  /* LuaJIT extensions */
+  void *jit_mcode;  /* compiled machine code base address */
+  size_t jit_sizemcode;  /* size of compiled mcode */
+  void **jit_pcaddr;  /* map from pc to mcode address */
+  int jit_status;  /* JIT engine status code */
 } Proto;
+
+
+/* masks for new-style vararg */
+#define VARARG_HASARG		1
+#define VARARG_ISVARARG		2
+#define VARARG_NEEDSARG		4
 
 
 typedef struct LocVar {
@@ -245,8 +282,14 @@ typedef struct LocVar {
 
 typedef struct UpVal {
   CommonHeader;
-  TObject *v;  /* points to stack or to its own value */
-  TObject value;  /* the value (when closed) */
+  TValue *v;  /* points to stack or to its own value */
+  union {
+    TValue value;  /* the value (when closed) */
+    struct {  /* double linked list (when open) */
+      struct UpVal *prev;
+      struct UpVal *next;
+    } l;
+  } u;
 } UpVal;
 
 
@@ -255,19 +298,19 @@ typedef struct UpVal {
 */
 
 #define ClosureHeader \
-	CommonHeader; lu_byte isC; lu_byte nupvalues; GCObject *gclist
+	CommonHeader; lu_byte isC; lu_byte nupvalues; GCObject *gclist; \
+	struct Table *env; lua_CFunction jit_gate
 
 typedef struct CClosure {
   ClosureHeader;
   lua_CFunction f;
-  TObject upvalue[1];
+  TValue upvalue[1];
 } CClosure;
 
 
 typedef struct LClosure {
   ClosureHeader;
   struct Proto *p;
-  TObject g;  /* global table for this closure */
   UpVal *upvals[1];
 } LClosure;
 
@@ -286,10 +329,15 @@ typedef union Closure {
 ** Tables
 */
 
-typedef struct Node {
-  TObject i_key;
-  TObject i_val;
+typedef struct TKey {
+  TValuefields;
   struct Node *next;  /* for chaining */
+} TKey;
+
+
+typedef struct Node {
+  TValue i_val;
+  TKey i_key;
 } Node;
 
 
@@ -298,9 +346,9 @@ typedef struct Table {
   lu_byte flags;  /* 1<<p means tagmethod(p) is not present */ 
   lu_byte lsizenode;  /* log2 of size of `node' array */
   struct Table *metatable;
-  TObject *array;  /* array part */
+  TValue *array;  /* array part */
   Node *node;
-  Node *firstfree;  /* this position is _free; all positions after it are full */
+  Node *lastfree;  /* any free position is before this position */
   GCObject *gclist;
   int sizearray;  /* size of `array' array */
 } Table;
@@ -319,24 +367,20 @@ typedef struct Table {
 
 
 
-extern const TObject luaO_nilobject;
+LUAI_DATA const TValue luaO_nilobject;
 
-int luaO_log2 (unsigned int x);
-int luaO_int2fb (unsigned int x);
-#define fb2int(x)	(((x) & 7) << ((x) >> 3))
+#define ceillog2(x)	(luaO_log2((x)-1) + 1)
 
-int luaO_rawequalObj_xray			(const TObject *t1, const TObject *t2);	// else part of the original function
-__forceinline int luaO_rawequalObj	(const TObject *t1, const TObject *t2)
-{
-	if (ttype(t1) != ttype(t2)) return	0;
-	else return	luaO_rawequalObj_xray	(t1,t2);
-}
-
-int luaO_str2d (const char *s, lua_Number *result);
-
-const char *luaO_pushvfstring (lua_State *L, const char *fmt, va_list argp);
-const char *luaO_pushfstring (lua_State *L, const char *fmt, ...);
-void luaO_chunkid (char *out, const char *source, int len);
+LUAI_FUNC int luaO_log2 (unsigned int x);
+LUAI_FUNC int luaO_int2fb (unsigned int x);
+LUAI_FUNC int luaO_fb2int (int x);
+LUAI_FUNC int luaO_rawequalObj (const TValue *t1, const TValue *t2);
+LUAI_FUNC int luaO_str2d (const char *s, lua_Number *result);
+LUAI_FUNC const char *luaO_pushvfstring (lua_State *L, const char *fmt,
+                                                       va_list argp);
+LUAI_FUNC const char *luaO_pushfstring (lua_State *L, const char *fmt, ...);
+LUAI_FUNC void luaO_chunkid (char *out, const char *source, size_t len);
 
 
 #endif
+
