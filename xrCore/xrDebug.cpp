@@ -301,19 +301,14 @@ namespace std{
 
     void	xrDebug::_initialize		()
     {
-//        std::set_new_mode 				(1);					// gen exception if can't allocate memory
         std::set_new_handler			(def_new_handler  );	// exception-handler for 'out of memory' condition
         ::SetUnhandledExceptionFilter	( UnhandledFilter );	// exception handler to all "unhandled" exceptions
     }
 #else
     typedef int		(__cdecl * _PNH)( size_t );
-    _CRTIMP int		__cdecl _set_new_mode( int );
-    _CRTIMP _PNH	__cdecl _set_new_handler( _PNH );
 
     void	xrDebug::_initialize		()
     {
-        _set_new_mode					(1);					// gen exception if can't allocate memory
-        _set_new_handler				(_out_of_memory	);		// exception-handler for 'out of memory' condition
 		std::set_terminate				(_terminate);
 		std::set_unexpected				(_terminate);
         ::SetUnhandledExceptionFilter	( UnhandledFilter );	// exception handler to all "unhandled" exceptions
