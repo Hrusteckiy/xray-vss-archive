@@ -487,7 +487,7 @@ bool game_sv_mp::OnNextMap				()
 
 	Msg("Going to level %s", MapName.c_str());
 
-	if (!stricmp(MapName.c_str(), Level().name().c_str())) return false;
+	if (!_stricmp(MapName.c_str(), Level().name().c_str())) return false;
 	string1024 Command;
 	sprintf(Command, "sv_changelevel %s", MapName.c_str());
 	Console->Execute(Command);
@@ -504,7 +504,7 @@ void game_sv_mp::OnPrevMap				()
 	m_pMapRotation_List.push_front(MapName);
 
 	Msg("Goint to level %s", MapName.c_str());
-	if (!stricmp(MapName.c_str(), Level().name().c_str())) return;
+	if (!_stricmp(MapName.c_str(), Level().name().c_str())) return;
 
 	string1024	Command;
 	sprintf(Command, "sv_changelevel %s", MapName.c_str());
@@ -546,7 +546,7 @@ void game_sv_mp::OnVoteStart				(LPCSTR VoteCommand, ClientID sender)
 	bool Found = false;
 	while (votecommands[i].command)
 	{
-		if (!stricmp(votecommands[i].name, CommandName))
+		if (!_stricmp(votecommands[i].name, CommandName))
 		{
 			Found = true;
 			break;

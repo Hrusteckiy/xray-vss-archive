@@ -8,8 +8,10 @@
 
 #include "stdafx.h"
 #include "script_space.h"
-#include "lua.h"
-#include "lstate.h"
+extern "C" {
+	#include "lua.h"
+	#include "lstate.h"
+};
 #include "script_engine.h"
 #include "script_thread.h"
 #include "ai_space.h"
@@ -103,7 +105,7 @@ bool CScriptThread::update()
 		
 		int					l_iErrorCode = lua_resume(lua(),0);
 		
-		if (l_iErrorCode) {
+		if (l_iErrorCode && (l_iErrorCode != LUA_YIELD)) {
 			ai().script_engine().print_output(lua(),*script_name(),l_iErrorCode);
 #ifdef DEBUG
 			print_stack		(lua());
@@ -111,7 +113,10 @@ bool CScriptThread::update()
 			m_active		= false;
 		}
 		else {
-			if (!(lua()->ci->state & CI_YIELD)) {
+			if (l_iErrorCode != LUA_YIELD) {
+				if (m_current_stack_level) {
+					ai().script_engine().print_output(lua(),*script_name(),l_iErrorCode);
+				}
 				m_active	= false;
 				ai().script_engine().script_log	(ScriptStorage::eLuaMessageTypeInfo,"Script %s is finished!",*m_script_name);
 			}

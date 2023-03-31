@@ -106,7 +106,8 @@ void CSE_ALifeAnomalousZone::on_spawn						()
 	for (u32 ii=0; ii<jj; ++ii) {
 		float fProbability		= randF(1.f);
 		float fSum				= 0.f;
-		for (u16 p=0; p<m_wItemCount; ++p) {
+		u16 p = 0;
+		for (; p<m_wItemCount; ++p) {
 			fSum			+= m_faWeights[p];
 			if (fSum > fProbability)
 				break;

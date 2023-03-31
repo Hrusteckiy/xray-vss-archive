@@ -21,9 +21,9 @@
 #include "../map_spot.h"
 #include "UIInventoryUtilities.h"
 
-const				SCROLLBARS_SHIFT			= 5;
-const				VSCROLLBAR_STEP				= 20; // В пикселях
-const				HSCROLLBAR_STEP				= 20; // В пикселях
+const int				SCROLLBARS_SHIFT			= 5;
+const int				VSCROLLBAR_STEP				= 20; // В пикселях
+const int				HSCROLLBAR_STEP				= 20; // В пикселях
 
 const u32			activeLocalMapColor			= 0xffc80000;
 const u32			inactiveLocalMapColor		= 0xff438cd1;

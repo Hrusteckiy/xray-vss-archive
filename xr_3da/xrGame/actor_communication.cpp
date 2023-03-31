@@ -130,9 +130,8 @@ void CActor::AddGameTask			 (const CInfoPortion* info_portion) const
 	for(TASK_ID_VECTOR::const_iterator it = info_portion->GameTasks().begin();
 		it != info_portion->GameTasks().end(); it++)
 	{
-
-		for(GAME_TASK_VECTOR::const_iterator it1 = task_vector.begin();
-			it1 != task_vector.end(); it1++)
+		GAME_TASK_VECTOR::const_iterator it1 = task_vector.begin();
+		for(; it1 != task_vector.end(); it1++)
 		{
 			if(*it == (*it1).task_id)
 				break;
@@ -402,7 +401,8 @@ void CActor::UpdateContact		(u16 contact_id)
 	if(ID() == contact_id) return;
 
 	TALK_CONTACT_VECTOR& contacts = contacts_registry->registry().objects();
-	for(TALK_CONTACT_VECTOR_IT it = contacts.begin(); contacts.end() != it; ++it)
+	TALK_CONTACT_VECTOR_IT it = contacts.begin();
+	for(; contacts.end() != it; ++it)
 		if((*it).id == contact_id) break;
 
 	if(contacts.end() == it)

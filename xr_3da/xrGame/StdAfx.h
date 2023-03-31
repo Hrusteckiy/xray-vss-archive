@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #pragma warning(disable:4995)
 #include "../stdafx.h"
 #pragma warning(default:4995)
@@ -25,6 +27,14 @@ IC	void		throw_and_log(const xr_string &s) {Msg("! %s",s.c_str()); throw s;}
 #	define	THROW2					VERIFY2
 #	define	THROW3					VERIFY3
 #endif
+
+namespace std {
+	class exception;
+}
+
+namespace boost {
+	void throw_exception(const std::exception& A);
+};
 
 #include "../gamefont.h"
 #include "../xr_object.h"

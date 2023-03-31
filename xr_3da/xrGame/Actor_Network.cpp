@@ -1467,7 +1467,7 @@ void	CActor::OnRender_Network()
 			point0L.set(point1L);
 		};
 
-		for (i=0; i<2; i++)
+		for (float i=0; i<2; i++)
 		{
 			c = i;
 			for (u32 k=0; k<3; k++)

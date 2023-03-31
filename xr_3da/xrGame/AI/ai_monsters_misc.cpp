@@ -173,10 +173,10 @@ void CAniVector::Load(CSkeletonAnimated *tpKinematics, LPCSTR caBaseName)
 	string256	S1, S2;
 	MotionID	tpMotionDef;
 	for (int i=0; ; ++i)
-		if (!!(tpMotionDef = tpKinematics->ID_Cycle_Safe(strconcat(S1,caBaseName,itoa(i,S2,10)))))
+		if (!!(tpMotionDef = tpKinematics->ID_Cycle_Safe(strconcat(S1,caBaseName,_itoa(i,S2,10)))))
 			A.push_back(tpMotionDef);
 		else
-			if (!!(tpMotionDef = tpKinematics->ID_FX_Safe(strconcat(S1,caBaseName,itoa(i,S2,10)))))
+			if (!!(tpMotionDef = tpKinematics->ID_FX_Safe(strconcat(S1,caBaseName,_itoa(i,S2,10)))))
 				A.push_back(tpMotionDef);
 			else
 				if (i<10)

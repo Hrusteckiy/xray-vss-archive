@@ -28,6 +28,7 @@
 #include "level.h"
 #include "net_utils.h"
 #include "script_callback_ex.h"
+#include "game_object_space.h"
 
 #define OBJECT_REMOVE_TIME 180000
 //////////////////////////////////////////////////////////////////////
@@ -165,7 +166,7 @@ void CGameObject::OnEvent		(NET_Packet& P, u16 type)
 	}
 }
 
-void __stdcall VisualCallback(CKinematics *tpKinematics);
+void VisualCallback(CKinematics *tpKinematics);
 
 BOOL CGameObject::net_Spawn		(CSE_Abstract*	DC)
 {
@@ -611,7 +612,7 @@ void CGameObject::SetKinematicsCallback		(bool set)
 		smart_cast<CKinematics*>(Visual())->Callback(0,0);
 };
 
-void __stdcall VisualCallback(CKinematics *tpKinematics)
+void VisualCallback(CKinematics *tpKinematics)
 {
 	CGameObject						*game_object = static_cast<CGameObject*>(static_cast<CObject*>(tpKinematics->Update_Callback_Param));
 	VERIFY							(game_object);

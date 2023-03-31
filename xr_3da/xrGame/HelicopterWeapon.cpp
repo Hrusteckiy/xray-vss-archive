@@ -6,16 +6,14 @@
 #include "../skeletoncustom.h"
 #include "Level.h"
 
-void __stdcall 
-CHelicopter::BoneMGunCallbackX(CBoneInstance *B)
+void CHelicopter::BoneMGunCallbackX(CBoneInstance *B)
 {
 	CHelicopter	* P = static_cast<CHelicopter*>(B->Callback_Param);
 	Fmatrix rX;		rX.rotateX		(P->m_cur_x_rot);
 	B->mTransform.mulB(rX);
 }
 
-void __stdcall 
-CHelicopter::BoneMGunCallbackY(CBoneInstance *B)
+void CHelicopter::BoneMGunCallbackY(CBoneInstance *B)
 {
 	CHelicopter	* P = static_cast<CHelicopter*>(B->Callback_Param);
 	Fmatrix rY;		rY.rotateY		(P->m_cur_y_rot);

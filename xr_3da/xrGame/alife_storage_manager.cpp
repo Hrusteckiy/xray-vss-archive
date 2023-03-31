@@ -72,7 +72,8 @@ void CALifeStorageManager::save	(LPCSTR save_name, bool update_name)
 	time_manager().save			(stream);
 	spawns().save				(stream);
 	objects().save				(stream);
-	events().save				(stream);
+#pragma todo("TODO: acidicMercury8 -> Hrust: Saves may be broken here")
+	//events().save				(stream);
 	tasks().save				(stream);
 	anomalies().save			(stream);
 	organizations().save		(stream);
@@ -121,7 +122,8 @@ bool CALifeStorageManager::load	(LPCSTR save_name)
 	time_manager().load			(*stream);
 	spawns().load				(*stream,file_name);
 	objects().load				(*stream,CALifeUpdatePredicate(this));
-	events().load				(*stream,CALifeUpdatePredicate(this));
+#pragma todo("TODO: acidicMercury8 -> Hrust: Saves may be broken here")
+	//events().load				(*stream,CALifeUpdatePredicate(this));
 	tasks().load				(*stream);
 	anomalies().load			(*stream);
 	organizations().load		(*stream);

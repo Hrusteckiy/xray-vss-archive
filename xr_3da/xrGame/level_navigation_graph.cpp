@@ -70,7 +70,8 @@ ICF	u64	CLevelNavigationGraph::cell_id			(CCellVertex *cell) const
 
 IC	void CLevelNavigationGraph::fill_cell		(u32 start_vertex_id, u32 link)
 {
-	for (u32 current_vertex_id = start_vertex_id, i = 1; ;++i) {
+	u32 current_vertex_id = start_vertex_id, i = 1;
+	for (; ;++i) {
 		u32					vertex_id = vertex(current_vertex_id)->link(link);
 		if (!valid_vertex_id(vertex_id))
 			break;

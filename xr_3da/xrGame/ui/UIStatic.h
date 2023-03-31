@@ -178,7 +178,7 @@ protected:
 
 	//текст
 	LPSTR m_str;
-	STRING m_sEdit;
+	xr_vector<char> m_sEdit;
 
 	/////////////////////////////////////
 	//форматированный вывод текста

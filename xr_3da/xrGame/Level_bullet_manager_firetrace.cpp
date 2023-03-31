@@ -29,7 +29,7 @@
 //	params;			// user defined abstract data
 //	Device.Statistic.TEST0.End();
 //return TRUE-продолжить трассировку / FALSE-закончить трассировку
-BOOL __stdcall CBulletManager::firetrace_callback(collide::rq_result& result, LPVOID params)
+BOOL CBulletManager::firetrace_callback(collide::rq_result& result, LPVOID params)
 {
 	SBullet* bullet = (SBullet*)params;
 
@@ -360,7 +360,7 @@ std::pair<float, float>  CBulletManager::ObjectHit	(SBullet* bullet, const Fvect
 		#endif		
 	}
 #ifdef DEBUG
-	extern g_bDrawBulletHit;
+	extern BOOL g_bDrawBulletHit;
 	if(g_bDrawBulletHit)
 		g_hit[bullet_state].push_back(dbg_bullet_pos);
 #endif

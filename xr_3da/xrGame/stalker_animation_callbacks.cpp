@@ -26,7 +26,7 @@ static const float p_spin_fire_factor		= 0.5f;
 static const float p_shoulder_fire_factor	= 0.5f;
 static const float p_head_fire_factor		= 0.0f;
 
-void __stdcall head_callback	(CBoneInstance *B)
+void head_callback	(CBoneInstance *B)
 {
 	CAI_Stalker*			A = static_cast<CAI_Stalker*>(B->Callback_Param);
 	Fvector c				= B->mTransform.c;
@@ -49,7 +49,7 @@ void __stdcall head_callback	(CBoneInstance *B)
 	B->mTransform.c			= c;
 }
 
-void __stdcall shoulder_callback(CBoneInstance *B)
+void shoulder_callback(CBoneInstance *B)
 {
 	CAI_Stalker*			A = static_cast<CAI_Stalker*>(B->Callback_Param);
 	Fvector c				= B->mTransform.c;
@@ -71,7 +71,7 @@ void __stdcall shoulder_callback(CBoneInstance *B)
 	B->mTransform.c			= c;
 }
 
-void __stdcall spine_callback(CBoneInstance *B)
+void spine_callback(CBoneInstance *B)
 {
 	CAI_Stalker*			A = static_cast<CAI_Stalker*>(B->Callback_Param);
 	Fvector c				= B->mTransform.c;

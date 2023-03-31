@@ -777,7 +777,7 @@ void CActor::UpdateCL	()
 			};
 		}
 		string256		name;	strcpy		(name,cName().c_str());
-		strlwr			(name)	;
+		_strlwr			(name)	;
 		if (strstr(name,"anton"))			{
 			// blue
 			_C								= color_xrgb(127,127,255);

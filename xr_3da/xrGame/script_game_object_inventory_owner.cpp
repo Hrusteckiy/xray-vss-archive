@@ -566,8 +566,8 @@ ETaskState CScriptGameObject::GetGameTaskState	(LPCSTR task_id, int objective_nu
 	if(!tasks) 
 		return eTaskStateDummy;
 
-	for(GAME_TASK_VECTOR::const_iterator it = tasks->begin();
-			tasks->end() != it; it++)
+	GAME_TASK_VECTOR::const_iterator it = tasks->begin();
+	for(; tasks->end() != it; it++)
 	{
 		if((*it).task_id == task_id) 
 			break;
@@ -598,9 +598,8 @@ void CScriptGameObject::SetGameTaskState	(ETaskState state, LPCSTR task_id, int 
 //	R_ASSERT3(task_index != NO_TASK, "wrong task id", task_id);
 	
 	GAME_TASK_VECTOR& tasks =  pActor->game_task_registry->registry().objects();
-
-	for(GAME_TASK_VECTOR::iterator it = tasks.begin();
-			tasks.end() != it; it++)
+	GAME_TASK_VECTOR::iterator it = tasks.begin();
+	for(; tasks.end() != it; it++)
 	{
 		if((*it).task_id == task_id) 
 			break;

@@ -257,8 +257,8 @@ void CPda::SendMessage(u32 pda_num, EPdaMsg msg, INFO_ID info_id)
 {
 	//найти PDA с нужным номером в списке
 	u32 i=0;
-	for(PDA_LIST_it it = m_PDAList.begin();
-		i<=pda_num && m_PDAList.end() != it; 
+	PDA_LIST_it it = m_PDAList.begin();
+	for(; i<=pda_num && m_PDAList.end() != it; 
 		++i, ++it){}
 
 	CPda* pPda = (*it);

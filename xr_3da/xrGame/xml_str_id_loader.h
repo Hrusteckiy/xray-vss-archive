@@ -82,13 +82,13 @@ LPCSTR CSXML_IdToIndex::tag_name = NULL;
 
 
 TEMPLATE_SPECIALIZATION
-CSXML_IdToIndex::CSXML_IdToIndex()
+CSXML_IdToIndex::CXML_IdToIndex()
 {
 }
 
 
 TEMPLATE_SPECIALIZATION
-CSXML_IdToIndex::~CSXML_IdToIndex()
+CSXML_IdToIndex::~CXML_IdToIndex()
 {
 }
 
@@ -97,9 +97,8 @@ TEMPLATE_SPECIALIZATION
 const typename CSXML_IdToIndex::ITEM_DATA* CSXML_IdToIndex::GetById (const T_ID& str_id, bool no_assert)
 {
 	T_INIT::InitXmlIdToIndex();
-		
-	for(T_VECTOR::iterator it = ItemDataVector().begin();
-		ItemDataVector().end() != it; it++)
+	T_VECTOR::iterator it = ItemDataVector().begin();
+	for(; ItemDataVector().end() != it; it++)
 	{
 		if( (*it).id == str_id)
 //		if(!xr_strcmp((*it).id, str_id))

@@ -42,7 +42,7 @@ CALifeSimulator::CALifeSimulator		(xrServer *server, shared_str *command_line) :
 	int							n = _min(4,_GetItemCount(**command_line,'/'));
 	for (int i=0; i<n; ++i) {
 		_GetItem				(**command_line,i,p.m_params[i],'/');
-		strlwr					(p.m_params[i]);
+		_strlwr					(p.m_params[i]);
 	}
 	
 	R_ASSERT2					(

@@ -13,7 +13,7 @@
 #include "../../../sound_player.h"
 #include "../../../ai_monster_space.h"
 
-static void __stdcall vfPlayEndCallBack(CBlend* B)
+static void vfPlayEndCallBack(CBlend* B)
 {
 	CBaseMonster *pBaseMonster = (CBaseMonster*)B->CallbackParam;
 	pBaseMonster->MotionMan.OnAnimationEnd();

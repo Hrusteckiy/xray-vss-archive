@@ -18,6 +18,7 @@ private:
 
 
 public:
+	virtual						~CUIWndCallback		();
 	virtual void				OnEvent				(CUIWindow* pWnd, s16 msg, void* pData = NULL);
 			void				Register			(CUIWindow* pChild);
 //			void				AddCallback			(LPCSTR control_id, s16 event, const luabind::functor<void> &lua_function);

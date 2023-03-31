@@ -125,5 +125,5 @@ namespace collide
 		IC rq_result*r_begin		()	{return &*results.begin();}
 		IC void		r_clear			()	{results.clear();}
 	};
-	typedef  BOOL __stdcall rq_callback 	(rq_result& result, LPVOID user_data);
+	typedef  BOOL rq_callback 	(rq_result& result, LPVOID user_data);
 };

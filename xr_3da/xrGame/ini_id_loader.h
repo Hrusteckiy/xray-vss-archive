@@ -108,13 +108,13 @@ LPCSTR CSINI_IdToIndex::line_name = NULL;
 
 
 TEMPLATE_SPECIALIZATION
-CSINI_IdToIndex::CSINI_IdToIndex()
+CSINI_IdToIndex::CIni_IdToIndex()
 {
 }
 
 
 TEMPLATE_SPECIALIZATION
-CSINI_IdToIndex::~CSINI_IdToIndex()
+CSINI_IdToIndex::~CIni_IdToIndex()
 {
 }
 
@@ -122,8 +122,8 @@ CSINI_IdToIndex::~CSINI_IdToIndex()
 TEMPLATE_SPECIALIZATION
 const typename ITEM_DATA* CSINI_IdToIndex::GetById (const T_ID& str_id, bool no_assert)
 {
-	for(T_VECTOR::iterator it = ItemDataVector().begin();
-		ItemDataVector().end() != it; it++)
+	T_VECTOR::iterator it = ItemDataVector().begin();
+	for(; ItemDataVector().end() != it; it++)
 	{
 		if(!xr_strcmp((*it).id, str_id))
 			break;
