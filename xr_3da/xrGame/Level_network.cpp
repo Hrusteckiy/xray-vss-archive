@@ -128,15 +128,15 @@ void CLevel::Send		(NET_Packet& P, u32 dwFlags, u32 dwTimeout)
 void CLevel::net_Update	()
 {
 	// If we have enought bandwidth - replicate client data on to server
-	Device.Statistic.netClient.Begin	();
+	Device.Statistic->netClient.Begin	();
 	ClientSend							();
-	Device.Statistic.netClient.End		();
+	Device.Statistic->netClient.End		();
 
 	// If server - perform server-update
 	if (Server && OnServer())	{
-		Device.Statistic.netServer.Begin();
+		Device.Statistic->netServer.Begin();
 		Server->Update					();
-		Device.Statistic.netServer.End	();
+		Device.Statistic->netServer.End	();
 	}
 }
 

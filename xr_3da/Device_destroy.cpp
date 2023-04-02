@@ -10,7 +10,7 @@ void CRenderDevice::_Destroy	(BOOL bKeepTextures)
 
 	// before destroy
 	bReady						= FALSE;
-	Statistic.OnDeviceDestroy	();
+	Statistic->OnDeviceDestroy	();
 	::Render->destroy			();
 	Resources->OnDeviceDestroy	(bKeepTextures);
 	RCache.OnDeviceDestroy		();

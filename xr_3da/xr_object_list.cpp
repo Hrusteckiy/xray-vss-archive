@@ -84,7 +84,7 @@ void	CObjectList::SingleUpdate	(CObject* O)
 	if (O->processing_enabled() &&	(Device.dwFrame != O->dwFrame_UpdateCL))
 	{
 		if (O->H_Parent())		SingleUpdate(O->H_Parent());
-		Device.Statistic.UpdateClient_active	++;
+		Device.Statistic->UpdateClient_active	++;
 		O->dwFrame_UpdateCL		=				Device.dwFrame;
 		O->UpdateCL				();
 		VERIFY3					(O->dbg_update_cl == Device.dwFrame, "Broken sequence of calls to 'UpdateCL'",*O->cName());
@@ -102,9 +102,9 @@ void CObjectList::Update		()
 {
 	// Clients
 	if (Device.fTimeDelta>EPS_S)			{
-		Device.Statistic.UpdateClient.Begin		();
-		Device.Statistic.UpdateClient_active	= objects_active.size	();
-		Device.Statistic.UpdateClient_total		= objects_active.size	() + objects_sleeping.size();
+		Device.Statistic->UpdateClient.Begin		();
+		Device.Statistic->UpdateClient_active	= objects_active.size	();
+		Device.Statistic->UpdateClient_total		= objects_active.size	() + objects_sleeping.size();
 		u32 objects_count	= objects_active.size();
 		if (objects_count > objects_dup_memsz)	{
 			// realloc
@@ -114,7 +114,7 @@ void CObjectList::Update		()
 		CopyMemory	(objects_dup,&*objects_active.begin(),objects_count*sizeof(CObject*));
 		for (u32 O=0; O<objects_count; O++) 
 			SingleUpdate	(objects_dup[O]);
-		Device.Statistic.UpdateClient.End		();
+		Device.Statistic->UpdateClient.End		();
 	}
 
 	// Destroy

@@ -27,7 +27,7 @@
 //	result.range;	// range from start to element 
 //	result.element;	// if (O) "num tri" else "num bone"
 //	params;			// user defined abstract data
-//	Device.Statistic.TEST0.End();
+//	Device.Statistic->TEST0.End();
 //return TRUE-продолжить трассировку / FALSE-закончить трассировку
 BOOL CBulletManager::firetrace_callback(collide::rq_result& result, LPVOID params)
 {

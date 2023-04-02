@@ -33,9 +33,9 @@ void CSkeletonRigid::CalculateBones			(BOOL bForceExact)
 
 	// exact computation
 	// Calculate bones
-	Device.Statistic.Animation.Begin();
+	Device.Statistic->Animation.Begin();
 	((CBoneDataRigid*)(*bones)[iRoot])->Calculate		(this,&Fidentity);
-	Device.Statistic.Animation.End	();
+	Device.Statistic->Animation.End	();
 
 	// Calculate BOXes/Spheres if needed
 	UCalc_Visibox++; 

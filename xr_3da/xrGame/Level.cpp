@@ -304,19 +304,19 @@ void CLevel::OnFrame	()
 		Engine.Event.Defer			("kernel:disconnect");
 		return;
 	} else {
-		Device.Statistic.netClient.Begin();
+		Device.Statistic->netClient.Begin();
 		ClientReceive					();
-		Device.Statistic.netClient.End	();
+		Device.Statistic->netClient.End	();
 	}
 
 	ProcessGameEvents	();
 
 	//Net sync
 	if (!ai().get_alife())
-		Device.Statistic.TEST2.Begin();
+		Device.Statistic->TEST2.Begin();
 	if (m_bNeed_CrPr)					make_NetCorrectionPrediction();
 	if (!ai().get_alife())
-		Device.Statistic.TEST2.End();
+		Device.Statistic->TEST2.End();
 
 	MapManager().Update		();
 	// Inherited update
@@ -382,17 +382,17 @@ void CLevel::OnFrame	()
 //	g_pGamePersistent->Environment.SetGameTime	(GetGameDayTimeSec(),GetGameTimeFactor());
 	g_pGamePersistent->Environment.SetGameTime	(GetEnvironmentGameDayTimeSec(),GetGameTimeFactor());
 
-	//Device.Statistic.Scripting.Begin	();
+	//Device.Statistic->Scripting.Begin	();
 	ai().script_engine().script_process(ScriptEngine::eScriptProcessorLevel)->update();
-	//Device.Statistic.Scripting.End		();
+	//Device.Statistic->Scripting.End		();
 	m_ph_commander->update				();
 	m_ph_commander_scripts->update		();
 //	autosave_manager().update			();
 
 	//просчитать полет пуль
-	Device.Statistic.TEST0.Begin		();
+	Device.Statistic->TEST0.Begin		();
 	BulletManager().Update				();
-	Device.Statistic.TEST0.End			();
+	Device.Statistic->TEST0.End			();
 }
 
 void CLevel::OnRender()
@@ -401,9 +401,9 @@ void CLevel::OnRender()
 	
 	Game().OnRender();
 	//отрисовать трассы пуль
-	//Device.Statistic.TEST1.Begin();
+	//Device.Statistic->TEST1.Begin();
 	BulletManager().Render();
-	//Device.Statistic.TEST1.End();
+	//Device.Statistic->TEST1.End();
 	//отрисовать интерфейc пользователя
 	HUD().RenderUI();
 

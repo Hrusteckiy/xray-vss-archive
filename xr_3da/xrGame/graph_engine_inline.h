@@ -40,7 +40,7 @@ IC	bool CGraphEngine::search		(
 	)
 {
 #ifndef AI_COMPILER
-	Device.Statistic.AI_Path.Begin();
+	Device.Statistic->AI_Path.Begin();
 #endif
 	typedef CPathManager<_Graph, CAlgorithm::CDataStorage, _Parameters, _dist_type,_index_type,_iteration_type>	CPathManagerGeneric;
 
@@ -58,7 +58,7 @@ IC	bool CGraphEngine::search		(
 	bool						successfull = m_algorithm->find(path_manager);
 
 #ifndef AI_COMPILER
-	Device.Statistic.AI_Path.End();
+	Device.Statistic->AI_Path.End();
 #endif
 	return						(successfull);
 }
@@ -76,7 +76,7 @@ IC	bool CGraphEngine::search			(
 	)
 {
 #ifndef AI_COMPILER
-	Device.Statistic.AI_Path.Begin();
+	Device.Statistic->AI_Path.Begin();
 #endif
 	typedef CPathManager<_Graph, CAlgorithm::CDataStorage, _Parameters, _dist_type,_index_type,_iteration_type>	CPathManagerGeneric;
 
@@ -94,7 +94,7 @@ IC	bool CGraphEngine::search			(
 	bool						successfull = m_algorithm->find(path_manager);
 
 #ifndef AI_COMPILER
-	Device.Statistic.AI_Path.End();
+	Device.Statistic->AI_Path.End();
 #endif
 	return						(successfull);
 }
@@ -132,7 +132,7 @@ IC	bool CGraphEngine::search			(
 //	)
 //{
 //#ifndef AI_COMPILER
-//	Device.Statistic.AI_Path.Begin();
+//	Device.Statistic->AI_Path.Begin();
 //#endif
 //	typedef CProblemSolver<
 //		_condition_type,
@@ -187,7 +187,7 @@ IC	bool CGraphEngine::search			(
 //	bool						successfull = algorithm.find(path_manager);
 //
 //#ifndef AI_COMPILER
-//	Device.Statistic.AI_Path.End();
+//	Device.Statistic->AI_Path.End();
 //#endif
 //	return						(successfull);
 //}
@@ -221,7 +221,7 @@ IC	bool CGraphEngine::search(
 	)
 {
 #ifndef AI_COMPILER
-	Device.Statistic.AI_Path.Begin();
+	Device.Statistic->AI_Path.Begin();
 #endif
 	typedef CProblemSolver<T1,T2,T3,T4,T5,T6,T7,T8>	CSProblemSolver;
 	typedef CPathManager<CSProblemSolver,CSolverAlgorithm::CDataStorage,_Parameters,_solver_dist_type,_solver_index_type,GraphEngineSpace::_iteration_type>	CSolverPathManager;
@@ -240,7 +240,7 @@ IC	bool CGraphEngine::search(
 	bool						successfull = m_solver_algorithm->find(path_manager);
 
 #ifndef AI_COMPILER
-	Device.Statistic.AI_Path.End();
+	Device.Statistic->AI_Path.End();
 #endif
 	return						(successfull);
 }

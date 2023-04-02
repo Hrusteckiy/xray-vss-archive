@@ -141,7 +141,7 @@ void CMovementManager::move_along_path	(CPHMovementControl *movement_control, Fv
 	}
 
 	// Физика устанавливает новую позицию
-	Device.Statistic.Physics.Begin	();
+	Device.Statistic->Physics.Begin	();
 
 	// получить физ. объекты в радиусе
 	object().setEnabled(false);
@@ -187,7 +187,7 @@ void CMovementManager::move_along_path	(CPHMovementControl *movement_control, Fv
 	
 	m_speed				= 0.5f * desirable_speed + 0.5f * real_speed;
 	
-	Device.Statistic.Physics.End	();
+	Device.Statistic->Physics.End	();
 
 	STOP_PROFILE
 }

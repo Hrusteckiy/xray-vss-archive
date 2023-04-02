@@ -259,7 +259,7 @@ void CSheduler::Switch				()
 void CSheduler::Update				()
 {
 	// Initialize
-	Device.Statistic.Sheduler.Begin	();
+	Device.Statistic->Sheduler.Begin	();
 	cycles_start					= CPU::GetCycleCount			();
 	cycles_limit					= CPU::cycles_per_milisec * u64	(iCeil(psShedulerCurrent)) + cycles_start;
 	internal_Registration			();
@@ -282,10 +282,10 @@ void CSheduler::Update				()
 	ProcessStep						();
 	clamp							(psShedulerTarget,3.f,66.f);
 	psShedulerCurrent				= 0.9f*psShedulerCurrent + 0.1f*psShedulerTarget;
-	Device.Statistic.fShedulerLoad	= psShedulerCurrent;
+	Device.Statistic->fShedulerLoad	= psShedulerCurrent;
 
 	// Finalize
 	g_bSheduleInProgress			= FALSE;
 	internal_Registration			();
-	Device.Statistic.Sheduler.End	();
+	Device.Statistic->Sheduler.End	();
 }

@@ -267,8 +267,8 @@ void CCustomMonster::shedule_Update	( u32 DT )
 	} else {
 		// here is monster AI call
 		m_fTimeUpdateDelta				= dt;
-		Device.Statistic.AI_Think.Begin	();
-		Device.Statistic.TEST1.Begin();
+		Device.Statistic->AI_Think.Begin	();
+		Device.Statistic->TEST1.Begin();
 		if (GetScriptControl())
 			ProcessScripts();
 		else {
@@ -276,8 +276,8 @@ void CCustomMonster::shedule_Update	( u32 DT )
 				Think					();
 		}
 		m_dwLastUpdateTime				= Device.dwTimeGlobal;
-		Device.Statistic.TEST1.End();
-		Device.Statistic.AI_Think.End	();
+		Device.Statistic->TEST1.End();
+		Device.Statistic->AI_Think.End	();
 
 		// Look and action streams
 		float							temp = conditions().health();
@@ -492,14 +492,14 @@ void CCustomMonster::eye_pp_s1			()
 	update_range_fov						(new_range, new_fov, eye_range, eye_fov);
 
 	// Standart visibility
-	Device.Statistic.AI_Vis_Query.Begin		();
+	Device.Statistic->AI_Vis_Query.Begin		();
 	Fmatrix									mProject,mFull,mView;
 	mView.build_camera_dir					(eye_matrix.c,eye_matrix.k,eye_matrix.j);
 	VERIFY									(_valid(eye_matrix));
 	mProject.build_projection				(deg2rad(new_fov),1,0.1f,new_range);
 	mFull.mul								(mProject,mView);
 	feel_vision_query						(mFull,eye_matrix.c);
-	Device.Statistic.AI_Vis_Query.End		();
+	Device.Statistic->AI_Vis_Query.End		();
 }
 
 void CCustomMonster::eye_pp_s2			( )
@@ -507,26 +507,26 @@ void CCustomMonster::eye_pp_s2			( )
 	++eye_pp_stage;
 
 	// Tracing
-	Device.Statistic.AI_Vis_RayTests.Begin	();
+	Device.Statistic->AI_Vis_RayTests.Begin	();
 	u32 dwTime			= Level().timeServer();
 	u32 dwDT			= dwTime-eye_pp_timestamp;
 	eye_pp_timestamp	= dwTime;
 	feel_vision_update						(this,eye_matrix.c,float(dwDT)/1000.f,memory().visual().transparency_threshold());
-	Device.Statistic.AI_Vis_RayTests.End	();
+	Device.Statistic->AI_Vis_RayTests.End	();
 }
 
 void CCustomMonster::Exec_Visibility	( )
 {
 	if (0==Sector())				return;
 
-	Device.Statistic.AI_Vis.Begin	();
+	Device.Statistic->AI_Vis.Begin	();
 	switch (eye_pp_stage%3)	
 	{
 	case 0:	eye_pp_s0();			break;
 	case 1:	eye_pp_s1();			break;
 	case 2:	eye_pp_s2();			break;
 	}
-	Device.Statistic.AI_Vis.End		();
+	Device.Statistic->AI_Vis.End		();
 }
 
 void CCustomMonster::UpdateCamera()

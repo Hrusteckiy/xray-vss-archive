@@ -753,9 +753,9 @@ void CSkeletonAnimated::CalculateBones		(BOOL bForceExact)
 
 	// exact computation
 	// calculate bones
-	Device.Statistic.Animation.Begin	();
+	Device.Statistic->Animation.Begin	();
 	((CBoneDataAnimated*)(*bones)[iRoot])->Calculate	(this,&Fidentity);
-	Device.Statistic.Animation.End		();
+	Device.Statistic->Animation.End		();
 
 	// Calculate BOXes/Spheres if needed
 	UCalc_Visibox++; 
