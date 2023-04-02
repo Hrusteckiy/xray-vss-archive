@@ -69,7 +69,9 @@ BOOL IGame_Level::Load			(u32 dwNum)
 	// Header
 	hdrLEVEL					H;
 	fs.r_chunk_safe				(fsL_HEADER,&H,sizeof(H));
-	R_ASSERT2					(XRCL_PRODUCTION_VERSION==H.XRLC_version,"Incompatible level version.");
+	string128 ver;
+	sprintf_s					(ver, "XRCL_PRODUCTION_VERSION %d \nH.XRLC_version %d", XRCL_PRODUCTION_VERSION, H.XRLC_version);
+	R_ASSERT3					(XRCL_PRODUCTION_VERSION==H.XRLC_version,"Incompatible level version.\n", ver);
 
 	// CForms
 	pApp->LoadTitle				("Loading CFORM...");
